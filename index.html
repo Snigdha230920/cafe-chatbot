@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Brew & Bites AI Cafe</title>
+
+  <!-- Lottie player (for 3D-style animation) -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header / Nav -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand" onclick="scrollToSection('hero')">
+        <div class="logo-icon"><i class="fas fa-mug-hot"></i></div>
+        <h1>Brew & Bites AI Cafe</h1>
+      </div>
+
+      <button id="hamburger" aria-label="Open menu"><i class="fas fa-bars"></i></button>
+
+      <nav id="main-nav" class="main-nav">
+        <ul>
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#cart">Cart</a></li>
+          <li><a href="#reservation">Reservation</a></li>
+          <li><a href="#payment">Payment</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="hero" class="hero">
+    <div class="hero-inner container">
+      <div class="hero-text">
+        <h2>Premium Coffee — Smart Ordering</h2>
+        <p>AI assistant ready to guide customers, manage orders, reservations and payments .</p>
+        <a class="btn" href="#menu">Explore Menu</a>
+      </div>
+
+      
+    </div>
+  </section>
+    </section> <!-- End of Hero -->
+
+  
+
+  <!-- Main layout: left Menu + right big Chatbot (on desktop stacked on mobile) -->
+  <main class="container main-grid">
+    <!-- Menu section -->
+    <section id="menu" class="menu-section">
+      <div class="section-header">
+        <h2>Our Menu</h2>
+        <p>Coffees & Cold Brews — Click the + to add to cart.</p>
+      </div>
+
+      <div id="menu-items" class="menu-grid" aria-live="polite">
+        <!-- JS injects menu cards here -->
+      </div>
+    </section>
+
+    <!-- Big AI Chatbot Panel -->
+    <aside class="chatbot-panel" id="chat-panel" role="region" aria-label="AI assistant">
+      <div class="chatbot-top">
+        <!-- 3D Lottie AI bot animation (preview) -->
+        <lottie-player src="https://assets5.lottiefiles.com/packages/lf20_touohxv0.json" background="transparent" speed="1" style="width:96px;height:96px;" loop autoplay></lottie-player>
+        <div class="chatbot-title">
+          <h3>BrewBot — Your AI Assistant</h3>
+        </div>
+      </div>
+
+      <div class="chatbot-quick">
+        <button class="chip" onclick="chatAsk('Show me the menu')"><i class="fas fa-book"></i> Show menu</button>
+        <button class="chip" onclick="chatAsk('I want to order a latte')"><i class="fas fa-coffee"></i> Order a Latte</button>
+        <button class="chip" onclick="chatAsk('Make a reservation for 2 at 7pm')"><i class="fas fa-calendar-check"></i> Make reservation</button>
+        <button class="chip" onclick="chatAsk('Show my cart')"><i class="fas fa-shopping-cart"></i> View cart</button>
+        <button class="chip" onclick="chatAsk('Proceed to payment')"><i class="fas fa-credit-card"></i> Payment</button>
+      </div>
+
+      <div id="chat-area" class="chat-area" aria-live="polite">
+        <!-- chat messages -->
+        <div class="msg bot">
+          <div class="avatar"><i class="fas fa-robot"></i></div>
+          <div class="bubble">
+            <strong>Hi! I'm BrewBot 👋</strong>
+            <div class="small">Ask me about menu, ordering, reservation or payment — or click one of the quick actions above.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input">
+        <input id="chat-input" placeholder="Type a question or click a suggested action..." aria-label="Chat input">
+        <button id="chat-send" class="btn" onclick="sendChatInput()">Send</button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Cart / Reservation / Payment sections -->
+  <section id="cart" class="section container">
+    <div class="section-header">
+      <h2>Your Cart</h2>
+      <p>Review items, change quantities or remove before checkout.</p>
+    </div>
+
+    <div id="cart-items" class="cart-box">
+      <p class="muted">Cart is empty — add items from the menu.</p>
+    </div>
+
+    <div class="cart-actions">
+      <div id="cart-total" class="cart-total">Total: $0.00</div>
+      <button class="btn" onclick="scrollToSection('payment')">Proceed to Payment</button>
+      <button class="btn ghost" onclick="clearCart()">Clear Cart</button>
+    </div>
+  </section>
+
+  <section id="reservation" class="section container">
+    <div class="section-header">
+      <h2>Make a Reservation</h2>
+      <p>Book a table — we’ll save the request locally for demo purposes.</p>
+    </div>
+
+    <form id="reservation-form" class="form-grid" onsubmit="submitReservation(event)">
+      <label>
+        Name
+        <input id="res-name" required placeholder="Full name" />
+      </label>
+
+      <label>
+        Phone or Email
+        <input id="res-contact" required placeholder="Phone or email" />
+      </label>
+
+      <label>
+        Date & Time
+        <input id="res-datetime" type="datetime-local" required />
+      </label>
+
+      <label>
+        Guests
+        <input id="res-guests" type="number" min="1" value="2" required />
+      </label>
+
+      <div class="form-actions">
+        <button class="btn" type="submit">Book Reservation</button>
+        <button class="btn ghost" type="button" onclick="document.getElementById('reservation-form').reset()">Reset</button>
+      </div>
+    </form>
+
+    <div id="reservation-result" class="muted" aria-live="polite"></div>
+  </section>
+
+  <section id="payment" class="section container">
+    <div class="section-header">
+      <h2>Checkout & Payment</h2>
+      <p>Choose UPI or Card for demo payment (client-side simulation).</p>
+    </div>
+
+    <div class="payment-grid">
+      <div class="payment-card">
+        <h3>UPI Payment</h3>
+        <label>
+          UPI ID
+          <input id="upi-id" placeholder="example@upi" />
+        </label>
+        <button class="btn" onclick="payUPI()">Pay with UPI</button>
+      </div>
+
+      <div class="payment-card">
+        <h3>Card Payment</h3>
+        <label>
+          Cardholder Name
+          <input id="card-name" placeholder="Full name" />
+        </label>
+        <label>
+          Card Number
+          <input id="card-number" placeholder="4242 4242 4242 4242" maxlength="19" />
+        </label>
+        <div class="two-col">
+          <label>
+            Expiry
+            <input id="card-exp" placeholder="MM/YY" maxlength="5" />
+          </label>
+          <label>
+            CVV
+            <input id="card-cvv" placeholder="123" maxlength="4" />
+          </label>
+        </div>
+        <button class="btn" onclick="payCard()">Pay with Card</button>
+      </div>
+    </div>
+
+    <div id="payment-status" class="muted" aria-live="polite"></div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section container">
+    <div class="section-header">
+      <h2>Contact & Location</h2>
+      <p>Reach us or visit our cafe.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Address</h3>
+        <p>123 Coffee Street, Brewville</p>
+        <h3>Phone</h3>
+        <p>+1 234 567 890</p>
+        <h3>Email</h3>
+        <p>hello@brewandbites.ai</p>
+      </div>
+
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.116744564!2d72.74109975!3d19.0821978!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b63d0b9cbf95%3A0x3bfb1d944e0c5b7c!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1693800000000!5m2!1sen!2sin"
+          loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <strong>Brew & Bites AI Cafe</strong>
+          <p>Where Every Cup Feels Like Home.</p>
+        </div>
+
+        <div>
+          <small>© <span id="year"></span> Brew & Bites AI Cafe — Demo</small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+  
+</body>
+</html>
